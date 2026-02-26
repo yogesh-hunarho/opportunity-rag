@@ -1,0 +1,194 @@
+{
+  "header": {
+    "title": "AVGC-XR India 2026 — Business Opportunity Analyzer",
+    "subtitle": "Union Budget 2026-27 · ₹250 Cr Allocation · 15,500 Labs · 2M Jobs by 2030",
+    "badge": "🔥 FIRST MOVER WINDOW OPEN"
+  },
+  "stats": [
+    { "val": "$9B", "lbl": "India Gaming Market by 2029" },
+    { "val": "15,500", "lbl": "Labs to be Set Up" },
+    { "val": "2M", "lbl": "Professionals Needed by 2030" },
+    { "val": "₹250Cr", "lbl": "Budget Allocation (AVGC)" },
+    { "val": "40-60%", "lbl": "India's Cost Advantage vs Global" }
+  ],
+  "navigation": [
+    { "id": "opportunities", "label": "Opportunity Map", "icon": "🗺️" },
+    { "id": "firstmover", "label": "First Mover Score", "icon": "⚡" },
+    { "id": "roadmap", "label": "12-Month Roadmap", "icon": "🛣️" },
+    { "id": "gaps", "label": "Gap Analysis", "icon": "🎯" },
+    { "id": "checklist", "label": "Action Checklist", "icon": "✅" }
+  ],
+  "sections": {
+    "opportunities": {
+      "title": "Business Opportunity Map",
+      "subtitle": "7 high-potential niches unlocked by the AVGC-XR policy. Click any card to expand details.",
+      "items": [
+        {
+          "color": "green",
+          "icon": "🏫",
+          "pill": "🔥 Hottest",
+          "pillType": "hot",
+          "title": "Lab Setup & Infrastructure Partner",
+          "desc": "Supply hardware, software bundles & turnkey lab setup to 15,000 schools. Direct govt tender opportunity.",
+          "meta": [
+            { "label": "Market", "val": "₹1,500–3,000Cr" },
+            { "label": "Timeline", "val": "6–18 mo" }
+          ],
+          "details": [
+            "Empanel with IICT Mumbai as a certified vendor",
+            "Bundle GPU workstations + Blender/Unity licenses + internet",
+            "Target state govts first (Karnataka, Maharashtra, Telangana)",
+            "Offer maintenance SLA for recurring revenue",
+            "Partner with GeM (Govt e-Marketplace) for procurement"
+          ]
+        },
+        {
+          "color": "blue",
+          "icon": "📚",
+          "pill": "High ROI",
+          "pillType": "high",
+          "title": "AVGC Curriculum & LMS Platform",
+          "desc": "Build India's first structured AVGC school curriculum. Labs need content — nobody has built this yet.",
+          "meta": [
+            { "label": "Market", "val": "SaaS/school" },
+            { "label": "Moat", "val": "Very High" }
+          ],
+          "details": [
+            "Vernacular content (Hindi, Tamil, Telugu) — huge gap",
+            "Offline-first LMS for low-bandwidth schools",
+            "Align with NCERT vocational framework",
+            "Certifications that industry recognizes (Unity, Adobe)",
+            "Freemium → institutional licensing model"
+          ]
+        },
+        "...more details items"
+      ]
+    },
+    "firstmover": {
+      "title": "First Mover Advantage Score",
+      "subtitle": "How each opportunity scores across key first-mover dimensions. Higher = stronger head-start advantage.",
+      "scorecards": [
+        {
+          "title": "🏫 Lab Setup & Infrastructure Partner",
+          "scores": [
+            { "label": "Market Readiness", "value": 90, "color": "green" },
+            { "label": "Competition Vacuum", "value": 80, "color": "green" },
+            { "label": "Govt Alignment", "value": 95, "color": "green" },
+            { "label": "Defensibility", "value": 60, "color": "orange" },
+            { "label": "Time to Revenue", "value": 75, "color": "green" }
+          ]
+        },
+        "...more details"
+      ],
+      "topPicks": [
+        {
+          "rank": "🥇",
+          "title": "Teacher Training Academy",
+          "desc": "Highest vacuum + fastest revenue + B2G safety net"
+        },
+        {
+          "rank": "🥈",
+          "title": "AVGC Curriculum & LMS Platform",
+          "desc": "Highest defensibility + network effects + platform moat"
+        },
+        {
+          "rank": "🥉",
+          "title": "Lab Infrastructure Partner",
+          "desc": "Fastest $$ but needs capital + vendor empanelment"
+        }
+      ]
+    },
+    "roadmap": {
+      "title": "12-Month Launch Roadmap",
+      "subtitle": "Recommended path for a founder entering the AVGC-XR space today (Teacher Training + LMS strategy).",
+      "phases": [
+        {
+          "color": "green",
+          "phase": "MONTHS 1–2 · Foundation",
+          "title": "Research, Network & Register",
+          "desc": "Visit IICT Mumbai. Meet Karnataka/Maharashtra state AVGC cells. Register company under Startup India. Identify 3 pilot schools. Attend India AI Impact Summit & AVGC events to build relationships.",
+          "tags": [
+            "Legal Setup",
+            "IICT Outreach",
+            "State Govt Meetings",
+            "Market Research"
+          ]
+        },
+        {
+          "color": "blue",
+          "phase": "MONTHS 2–4 · Pilot",
+          "title": "Build MVP & Run Pilot Training",
+          "desc": "Design a 5-day teacher bootcamp curriculum. Partner with 2-3 AVGC experts. Run free pilot in 2 schools. Collect data, testimonials, impact metrics. Build basic LMS with course content.",
+          "tags": [
+            "Curriculum Design",
+            "Pilot Program",
+            "Impact Metrics",
+            "LMS MVP"
+          ]
+        },
+        {
+          "color": "purple",
+          "phase": "MONTHS 4–6 · Validate",
+          "title": "First Paying Clients & Grant Applications",
+          "desc": "Pitch 5 schools/colleges for paid training (₹2–5L per batch). Apply for Startup India Seed Fund, NASSCOM Foundation grants, or state AVGC policy grants. Publish case study from pilot.",
+          "tags": ["Revenue", "Grant Applications", "Case Study", "Press"]
+        },
+        "...more details phases"
+      ]
+    },
+    "gaps": {
+      "title": "Gap Analysis — What's Missing in the Market",
+      "subtitle": "Where the policy creates demand but no organized business exists yet. These are your entry points.",
+      "table": {
+        "headers": [
+          "Gap Area",
+          "Who Has the Problem",
+          "Current Solution",
+          "Opportunity Size",
+          "Status"
+        ],
+        "rows": [
+          {
+            "area": "Teacher AVGC training",
+            "who": "15,000 schools, state boards",
+            "current": "None (nobody doing this at scale)",
+            "size": "₹300–600 Cr",
+            "status": "Wide Open",
+            "statusType": "red"
+          },
+          "...more"
+        ]
+      },
+      "risks": "Budget clarity is still vague — no multi-year roadmap. Past AVGC announcements (2022 Task Force) stalled at implementation. Build your business to survive slow govt rollout by also targeting private schools & colleges from day one.",
+      "wins": "Governments prefer to scale with vendors who already have proof points. If you're training teachers & building curriculum before 2027, you'll be the go-to partner when ₹250Cr starts flowing. Network effects compound early."
+    },
+    "checklist": {
+      "title": "Action Checklist — Your First 90 Days",
+      "subtitle": "Click items to check them off as you go. Track your readiness score below.",
+      "categories": [
+        {
+          "title": "🏛️ Government & Policy",
+          "items": [
+            "Read the full Union Budget 2026-27 AVGC section on MIB & PIB websites",
+            "Download and study the AVGC Task Force 2022 report (PIB website)",
+            "Email IICT Mumbai to introduce yourself and understand vendor empanelment process",
+            "Identify your target state (Karnataka, Maharashtra, Telangana = most active)",
+            "Register on GeM (Govt e-Marketplace) if targeting infrastructure/hardware"
+          ]
+        },
+        {
+          "title": "🏢 Business Setup",
+          "items": []
+        },
+        {
+          "title": "🤝 Relationships & Network",
+          "items": []
+        },
+        {
+          "title": "💡 Product & Pilot",
+          "items": []
+        }
+      ]
+    }
+  }
+}
