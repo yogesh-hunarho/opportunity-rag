@@ -2,6 +2,12 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import AVGCAnalyzer from './AVGCAnalyzer';
+import Link from 'next/link';
+import { Button } from './ui/button';
+import Image from 'next/image';
+import { ModeToggle } from './mode-toggle';
+import { Menu, Plus, Sparkles } from 'lucide-react';
+
 // import sampleData from '@/lib/avgc-data.json';
 
 
@@ -175,6 +181,7 @@ const WarningBanner = ({
 // ── Main Component ──────────────────────────────────────────────────
 const HomePage = () => {
   const [email, setEmail] = useState('');
+  const [apiKey, setApiKey] = useState('');
   const [prompt, setPrompt] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -239,7 +246,7 @@ const HomePage = () => {
       const res = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, prompt: currentPrompt }),
+        body: JSON.stringify({ email, prompt: currentPrompt, apiKey }),
       });
 
       const result = await res.json();
@@ -325,6 +332,7 @@ const HomePage = () => {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setEmail('');
+    setApiKey('');
     setAnalysisData(null);
     setChats([]);
     setActiveChatId(null);
@@ -335,41 +343,73 @@ const HomePage = () => {
   // Email login screen
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-[#0a0e1a] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <div className="w-full max-w-md">
-          <div className="text-center mb-8">
+          {/* <div className="text-center mb-8">
             <div className="text-6xl mb-4">🎮</div>
-            <h1 className="text-3xl font-bold text-white mb-2">Opportunity Analyzer</h1>
-            <p className="text-[#8899cc] text-sm">AI-powered business opportunity analysis using Gemini</p>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Market Analyzer</h1>
+            <p className="text-muted-foreground text-sm">AI-powered business opportunity analysis using AI</p>
+          </div> */}
+
+          <div className="text-center mb-4 ">
+            <div className="flex justify-center">
+              <div className="relative">
+                <Image
+                  src="/logo1.png"
+                  alt="AI-powered market analysis illustration"
+                  width={200}
+                  height={200}
+                  className='rounded-xl'
+                  priority
+                />
+              </div>
+            </div>
           </div>
 
-          <form onSubmit={handleLogin} className="bg-[#111827] border border-[#1e2a45] rounded-2xl p-8 shadow-2xl shadow-blue-900/10">
-            <label className="block text-sm font-bold text-[#8899cc] mb-2">Enter your email to get started</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              required
-              className="w-full px-4 py-3 rounded-xl bg-[#0a0e1a] border border-[#1e2a45] text-white placeholder-[#4b5a7a] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm"
-            />
+          <form onSubmit={handleLogin} className="bg-card border border-border rounded-xl p-8 shadow-2xl shadow-blue-900/10">
+            <label className="block text-sm font-bold text-muted-foreground mb-2">Enter your email to get started</label>
+            <div className="mb-4">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                required
+                className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm"
+              />
+            </div>
+            {email.trim() && email.trim().toLowerCase() !== 'yogesh.singh@hunarho.com' && (
+              <div className="mb-4 animate-[fadeSlideIn_0.2s_ease-out]">
+                <label className="block text-sm font-bold text-muted-foreground mb-2">AI API Key</label>
+                <input
+                  type="password"
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  placeholder="Enter your AI API key"
+                  required
+                  className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm"
+                />
+              </div>
+            )}
             <button
               type="submit"
-              className="w-full mt-4 py-3 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-600/20 cursor-pointer"
+              className="w-full mt-2 py-3 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-600/20 cursor-pointer"
             >
               Continue →
             </button>
+            <div className='text-blue-600 text-end w-full mt-2 text-xs'>
+              <Link href="/gemini-guide">Get AI API Key</Link>
+            </div>
           </form>
         </div>
       </div>
     );
   }
 
-  console.log(chats);
 
   // Main app layout
   return (
-    <div className="min-h-screen bg-[#0a0e1a] text-[#e0e6f0]">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Keyframe for error animation */}
       <style>{`
         @keyframes fadeSlideIn {
@@ -380,18 +420,18 @@ const HomePage = () => {
 
       <div className="flex h-screen overflow-hidden">
         {/* Chat History Sidebar */}
-        <aside className={`${sidebarOpen ? 'w-80' : 'w-0'} transition-all duration-300 bg-[#0d1224] border-r border-[#1e2a45] flex flex-col overflow-hidden shrink-0`}>
-          <div className="p-4 border-b border-[#1e2a45]">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-bold text-white">💬 Chat History</h2>
+        <aside className={`${sidebarOpen ? 'w-80' : 'w-0'} transition-all duration-300 bg-card border-r border-border flex flex-col overflow-hidden shrink-0`}>
+          <div className="p-4 border-b border-border">
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="text-sm font-bold text-foreground">💬 Chat History</h2>
               <button
                 onClick={handleLogout}
-                className="text-[10px] text-[#6b7ca4] hover:text-red-400 transition-colors cursor-pointer"
+                className="text-[10px] text-red-900 hover:text-red-400 transition-colors cursor-pointer"
               >
                 Logout
               </button>
             </div>
-            <div className="text-[10px] text-[#6b7ca4] truncate">{email}</div>
+            {/* <div className="text-[10px] text-[#6b7ca4] truncate">{email}</div> */}
           </div>
 
           <div className="flex-1 overflow-y-auto p-3 space-y-1.5">
@@ -408,10 +448,10 @@ const HomePage = () => {
                   className={`w-full text-left p-3 rounded-xl transition-all cursor-pointer ${
                     activeChatId === chat.id
                       ? 'bg-blue-600/20 border border-blue-500/30'
-                      : 'hover:bg-[#1a2240] border border-transparent'
+                      : 'hover:bg-accent border border-transparent'
                   }`}
                 >
-                  <div className="text-xs font-semibold text-white truncate">{chat.prompt}</div>
+                  <div className="text-xs font-semibold text-foreground truncate">{chat.prompt}</div>
                   <div className="text-[10px] text-[#6b7ca4] mt-1">
                     {new Date(chat.createdAt).toLocaleDateString('en-IN', {
                       day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -425,45 +465,36 @@ const HomePage = () => {
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Top Bar */}
-          <div className="bg-[#111827] border-b border-[#1e2a45] px-4 py-3 flex items-center gap-3 shrink-0">
-            <button
+          <div className="bg-background border-b border-border px-4 py-3 flex items-center gap-3 shrink-0">
+            <Button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="text-[#6b7ca4] hover:text-white transition-colors text-lg cursor-pointer"
+              className="transition-colors text-lg cursor-pointer"
               title="Toggle sidebar"
+              variant={"ghost"}
+              size={"icon"}
             >
-              ☰
-            </button>
+              <Menu />
+            </Button>
 
-            <form onSubmit={handleGenerate} className="flex-1 flex gap-3">
-              <div className="flex-1 relative">
-                <input
-                  type="text"
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  placeholder="Enter a topic to analyze (e.g., 'EV charging infrastructure in India 2026')"
-                  disabled={loading}
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#0a0e1a] border border-[#1e2a45] text-white placeholder-[#4b5a7a] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm disabled:opacity-50"
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={loading || !prompt.trim()}
-                className="px-6 py-2.5 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 disabled:from-gray-700 disabled:to-gray-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-600/20 text-sm whitespace-nowrap cursor-pointer disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <span className="flex items-center gap-2">
-                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    Analyzing...
-                  </span>
-                ) : (
-                  '🚀 Generate'
-                )}
-              </button>
-            </form>
+            <div className="flex-1 flex justify-end items-center gap-4">
+              <ModeToggle />
+              {analysisData && (
+                <Button
+                  variant={"default"}
+                  size={"sm"}
+                  onClick={() => {
+                    setAnalysisData(null);
+                    setActiveChatId(null);
+                    setPrompt('');
+                    setError(null);
+                    setWarning(null);
+                  }}
+                >
+                  <Plus/>
+                  New Chat
+                </Button>
+              )}
+            </div>
           </div>
 
           {/* Content Area */}
@@ -485,35 +516,87 @@ const HomePage = () => {
             {loading && !analysisData && (
               <div className="flex flex-col items-center justify-center h-full gap-4">
                 <div className="relative">
-                  <div className="w-16 h-16 border-4 border-[#1e2a45] border-t-blue-500 rounded-full animate-spin" />
+                  <div className="w-16 h-16 border-4 border-border border-t-blue-500 rounded-full animate-spin" />
                   <div className="absolute inset-0 flex items-center justify-center text-2xl">🤖</div>
                 </div>
                 <div className="text-center">
-                  <p className="text-white font-bold mb-1">Gemini is analyzing...</p>
+                  <p className="text-white font-bold mb-1">AI is analyzing...</p>
                   <p className="text-[#6b7ca4] text-xs">This may take 15-30 seconds</p>
                 </div>
                 {/* Skeleton */}
                 <div className="w-full max-w-4xl px-8 space-y-4 mt-4">
-                  <div className="h-16 bg-[#111827] rounded-xl animate-pulse" />
-                  <div className="h-12 bg-[#111827] rounded-xl animate-pulse" />
+                  <div className="h-16 bg-card rounded-xl animate-pulse" />
+                  <div className="h-12 bg-card rounded-xl animate-pulse" />
                   <div className="grid grid-cols-3 gap-4">
-                    <div className="h-40 bg-[#111827] rounded-xl animate-pulse" />
-                    <div className="h-40 bg-[#111827] rounded-xl animate-pulse" />
-                    <div className="h-40 bg-[#111827] rounded-xl animate-pulse" />
+                    <div className="h-40 bg-card rounded-xl animate-pulse" />
+                    <div className="h-40 bg-card rounded-xl animate-pulse" />
+                    <div className="h-40 bg-card rounded-xl animate-pulse" />
                   </div>
                 </div>
               </div>
             )}
 
             {!loading && !analysisData && !error && (
-              <div className="flex flex-col items-center justify-center h-full gap-6 text-center p-8">
-                <div className="text-7xl">🎯</div>
+              <div className="flex flex-col items-center justify-center h-full gap-6 text-center p-6">
+                <div className="text-center">
+                    <div className="flex justify-center">
+                      <div className="relative">
+                        <Image
+                          src="/logo1.png"
+                          alt="AI-powered market analysis illustration"
+                          width={200}
+                          height={200}
+                          priority
+                        />
+                      </div>
+                    </div>
+                    {/* <h1 className="text-5xl md:text-6xl font-bold text-balance">
+                      <span className="dark:text-white text-dark ">Market Analyze</span> <br/>
+                    </h1> */}
+                </div>
+
                 <div>
-                  <h2 className="text-2xl font-bold text-white mb-2">Ready to Analyze</h2>
-                  <p className="text-[#6b7ca4] text-sm max-w-md">
-                    Enter any industry, policy, or market topic above and Gemini will generate a comprehensive business opportunity analysis for you.
+                  <h1 className="text-xl md:text-4xl font-bold text-balance">Market Analyze</h1>
+                  <p className="text-muted-foreground text-sm max-w-md">
+                    Enter any industry, policy, or market topic above and AI will generate a comprehensive business opportunity analysis for you.
                   </p>
                 </div>
+
+                <div className="max-w-4xl w-full">
+                  <form onSubmit={handleGenerate} className="flex-1 flex gap-3">
+                    <div className="flex-1 relative">
+                      <input
+                        type="text"
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        placeholder="Enter a topic to analyze (e.g., 'EV charging infrastructure in India 2026')"
+                        disabled={loading}
+                        className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm disabled:opacity-50"
+                      />
+                    </div>
+                    <Button
+                      type="submit"
+                      disabled={loading || !prompt.trim()}
+                      variant="default"
+                      size="lg"
+                      className='cursor-pointer'
+                      // className="px-6 py-2.5 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 disabled:from-gray-700 disabled:to-gray-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-600/20 text-sm whitespace-nowrap cursor-pointer disabled:cursor-not-allowed"
+                    >
+                      {loading ? (
+                        <span className="flex items-center gap-2">
+                          <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                          </svg>
+                          Analyzing...
+                        </span>
+                      ) : (
+                        '🚀 Generate'
+                      )}
+                    </Button>
+                  </form>
+                </div>
+                
                 <div className="flex flex-wrap gap-2 justify-center mt-2">
                   {[
                     'EV Charging Infrastructure India',
@@ -525,7 +608,7 @@ const HomePage = () => {
                     <button
                       key={suggestion}
                       onClick={() => setPrompt(suggestion)}
-                      className="px-3 py-1.5 bg-[#1a2240] text-[#60a5fa] text-xs rounded-lg hover:bg-[#1e2a55] transition-colors cursor-pointer border border-[#1e2a45]"
+                      className="px-3 py-1.5 bg-accent text-primary text-xs rounded-lg hover:bg-accent/80 transition-colors cursor-pointer border border-border"
                     >
                       {suggestion}
                     </button>
@@ -538,7 +621,6 @@ const HomePage = () => {
               <AVGCAnalyzer data={analysisData} />
             )}
 
-            {/* <AVGCAnalyzer data={sampleData} /> */}
           </div>
         </div>
       </div>

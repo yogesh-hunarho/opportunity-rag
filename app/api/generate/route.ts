@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 // import sampleData from '@/lib/avgc-data.json';
 import sampleDataForAI from "@/lib/data-for-gemini.json"
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+
 
 // ── Structured Error Types ──────────────────────────────────────────
 type ErrorCode =
@@ -87,7 +87,7 @@ RULES:
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, prompt } = await req.json();
+    const { email, prompt, apiKey } = await req.json();
 
     if (!email || !prompt) {
       return buildError(
@@ -97,10 +97,24 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    let currentAi;
+    if (email.toLowerCase() === 'yogesh.singh@hunarho.com') {
+      currentAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+    } else {
+      if (!apiKey) {
+        return buildError(
+          'VALIDATION_ERROR',
+          'Gemini API Key is required for this email address.',
+          400,
+        );
+      }
+      currentAi = new GoogleGenAI({ apiKey });
+    }
+
     // ── Call Gemini ────────────────────────────────────────────────
     let response;
     try {
-      response = await ai.models.generateContent({
+      response = await currentAi.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: prompt,
         config: {
