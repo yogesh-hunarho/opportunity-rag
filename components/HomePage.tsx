@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { Button } from './ui/button';
 import Image from 'next/image';
 import { ModeToggle } from './mode-toggle';
-import { Menu, Plus, Sparkles } from 'lucide-react';
+import { Menu, Plus } from 'lucide-react';
+import LandingPage from './LandingPage';
 
 // import sampleData from '@/lib/avgc-data.json';
 
@@ -343,66 +344,13 @@ const HomePage = () => {
   // Email login screen
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="w-full max-w-md">
-          {/* <div className="text-center mb-8">
-            <div className="text-6xl mb-4">🎮</div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">Market Analyzer</h1>
-            <p className="text-muted-foreground text-sm">AI-powered business opportunity analysis using AI</p>
-          </div> */}
-
-          <div className="text-center mb-4 ">
-            <div className="flex justify-center">
-              <div className="relative">
-                <Image
-                  src="/logo1.png"
-                  alt="AI-powered market analysis illustration"
-                  width={200}
-                  height={200}
-                  className='rounded-xl'
-                  priority
-                />
-              </div>
-            </div>
-          </div>
-
-          <form onSubmit={handleLogin} className="bg-card border border-border rounded-xl p-8 shadow-2xl shadow-blue-900/10">
-            <label className="block text-sm font-bold text-muted-foreground mb-2">Enter your email to get started</label>
-            <div className="mb-4">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                required
-                className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm"
-              />
-            </div>
-            {email.trim() && email.trim().toLowerCase() !== 'yogesh.singh@hunarho.com' && (
-              <div className="mb-4 animate-[fadeSlideIn_0.2s_ease-out]">
-                <label className="block text-sm font-bold text-muted-foreground mb-2">AI API Key</label>
-                <input
-                  type="password"
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  placeholder="Enter your AI API key"
-                  required
-                  className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm"
-                />
-              </div>
-            )}
-            <button
-              type="submit"
-              className="w-full mt-2 py-3 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-600/20 cursor-pointer"
-            >
-              Continue →
-            </button>
-            <div className='text-blue-600 text-end w-full mt-2 text-xs'>
-              <Link href="/gemini-guide">Get AI API Key</Link>
-            </div>
-          </form>
-        </div>
-      </div>
+      <LandingPage 
+        onLogin={(receivedEmail, receivedApiKey) => {
+          setEmail(receivedEmail);
+          setApiKey(receivedApiKey);
+          setIsLoggedIn(true);
+        }} 
+      />
     );
   }
 
