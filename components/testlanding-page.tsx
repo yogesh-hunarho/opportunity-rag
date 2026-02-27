@@ -43,7 +43,7 @@ const NovaraHero = ({ onLogin }:LandingPageProps) => {
 
       <main className="relative z-10 flex flex-col items-center justify-center text-center px-6 pt-20 md:pt-36">
         <h1 className="text-2xl md:text-7xl font-medium tracking-tight leading-[1.05] max-w-5xl mb-4">
-          <span className="text-3xl">AI That Thinks With <span className="text-gray-400 italic ">You</span>,</span><br className="block" /> 
+          <span className="text-3xl md:text-7xl">AI That Thinks With <span className="text-gray-400 italic ">You</span>,</span><br className="block" /> 
           <TextType 
             text={["Think Smarter About Markets", "From Idea to Opportunity", "Build Smarter Businesses" ,"Market Competitive Insight","Turn Uncertainty Into Market"]}
             typingSpeed={75}
@@ -93,7 +93,7 @@ const NovaraHero = ({ onLogin }:LandingPageProps) => {
                 type="submit"
                 className="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-gray-200 transition-all flex items-center justify-center gap-2 group cursor-pointer"
                 >
-                Analyze
+                Login
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
             </form>
