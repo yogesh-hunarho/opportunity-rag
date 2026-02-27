@@ -32,17 +32,17 @@ const NovaraHero = ({ onLogin }:LandingPageProps) => {
           className="h-full w-full object-cover"
           // poster="/poster.png"
         />
-        {/* <motion.div 
-            style={{ y: y1 }}
-            className="absolute inset-0 z-0 opacity-60"
-        >
-            <img src="/poster.png" alt="poster" className="object-fit" />
-        </motion.div> */}
         <div className="absolute inset-0 bg-black/50 backdrop-blur-[1px]"></div>
       </div>
-
+      <header className="relative z-20 w-full flex items-center justify-between px-6 md:px-10 py-4">
+        <img
+          src="/main-logo.png"
+          alt="MehtaQuest Logo"
+          className="w-20 md:w-30 h-auto object-contain"
+        />
+      </header>
       <main className="relative z-10 flex flex-col items-center justify-center text-center px-6 pt-5 md:pt-10">
-        <img src="/main-logo.png" alt="poster" className="object-fit w-64 h-40" />
+       
         <h1 className="text-2xl md:text-4xl font-medium -tracking-normal leading-[1.05] max-w-4xl mb-7 pt-8">
           <span className="text-3xl md:text-6xl">AI That Thinks With <span className="text-gray-400 italic ">You</span>,</span><br className="block" /> 
           <TextType 
@@ -64,7 +64,7 @@ const NovaraHero = ({ onLogin }:LandingPageProps) => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="w-full max-w-md p-5 rounded-xl backdrop-blur-lg border border-white/10 shadow-2xl"
+          className="w-full max-w-md p-7 rounded-xl backdrop-blur-lg border border-white/10 shadow-2xl"
         >
           <form onSubmit={handleLoginSubmit} className="space-y-4">
             <div className="text-left">
