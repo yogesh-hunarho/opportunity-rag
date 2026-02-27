@@ -42,8 +42,8 @@ const NovaraHero = ({ onLogin }:LandingPageProps) => {
       </div>
 
       <main className="relative z-10 flex flex-col items-center justify-center text-center px-6 pt-20 md:pt-36">
-        <h1 className="text-4xl md:text-7xl font-medium tracking-tight leading-[1.05] max-w-5xl mb-4">
-          AI That Thinks With <span className="text-gray-400 italic ">You</span>, <br className="hidden md:block" /> 
+        <h1 className="text-2xl md:text-7xl font-medium tracking-tight leading-[1.05] max-w-5xl mb-4">
+          <span className="text-3xl">AI That Thinks With <span className="text-gray-400 italic ">You</span>,</span><br className="block" /> 
           <TextType 
             text={["Think Smarter About Markets", "From Idea to Opportunity", "Build Smarter Businesses" ,"Market Competitive Insight","Turn Uncertainty Into Market"]}
             typingSpeed={75}
@@ -56,7 +56,7 @@ const NovaraHero = ({ onLogin }:LandingPageProps) => {
           {/* <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-900 via-white to-purple-900 font-sans">Not For You</span> */}
         </h1>
 
-        <p className="text-sm md:text-lg max-w-4xl leading-relaxed mb-10 font-light">
+        <p className="text-xs md:text-lg max-w-4xl leading-relaxed mb-10 font-light">
           MehtaQuest is an advanced AI-powered business intelligence platform designed for aspiring entrepreneurs and innovation-driven R&D teams to turn ideas into actionable business plans. It analyzes market gaps, identifying high-potential opportunities, market risks, first mover score and evaluate competitive landscapes.
         </p>
 
@@ -93,7 +93,7 @@ const NovaraHero = ({ onLogin }:LandingPageProps) => {
                 type="submit"
                 className="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-gray-200 transition-all flex items-center justify-center gap-2 group cursor-pointer"
                 >
-                Analyze Opportunities
+                Analyze
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
             </form>

@@ -89,111 +89,108 @@ export async function POST(req: NextRequest) {
   try {
     const { email, prompt, name } = await req.json();
 
-    // if (!email || !prompt || !name) {
-    //   return buildError(
-    //     'VALIDATION_ERROR',
-    //     'Name, email, and prompt are required.',
-    //     400,
-    //   );
-    // }
+    if (!email || !prompt || !name) {
+      return buildError(
+        'VALIDATION_ERROR',
+        'Name, email, and prompt are required.',
+        400,
+      );
+    }
 
-    // const pickedApiKeys = [
-    //   "AIzaSyCHI4M7OYUFz-FgNTfI5obWR4mafRK9qOw",
-    //   "AIzaSyCISw8Zkm_lXypTk9Mdxkembh8u2jHSl4g",
-    //   "AIzaSyAnWB-k4UdzQ3txwXuRQAaSWoVBLP4HPkQ",
-    //   "AIzaSyADaqeXpre3Hyb05VKAU75RGTuXZoaNKfk"
-    // ];
+    const pickedApiKeys = [
+      "AIzaSyCHI4M7OYUFz-FgNTfI5obWR4mafRK9qOw",
+      "AIzaSyCISw8Zkm_lXypTk9Mdxkembh8u2jHSl4g",
+      "AIzaSyAnWB-k4UdzQ3txwXuRQAaSWoVBLP4HPkQ",
+      "AIzaSyADaqeXpre3Hyb05VKAU75RGTuXZoaNKfk"
+    ];
 
-    // const randomApiKey = pickedApiKeys[Math.floor(Math.random() * pickedApiKeys.length)];
+    const randomApiKey = pickedApiKeys[Math.floor(Math.random() * pickedApiKeys.length)];
 
-    // const currentAi = new GoogleGenAI({ apiKey: randomApiKey });
+    const currentAi = new GoogleGenAI({ apiKey: randomApiKey });
 
-    // // ── Call Gemini ────────────────────────────────────────────────
-    // let response;
-    // try {
-    //   response = await currentAi.models.generateContent({
-    //     model: 'gemini-2.5-flash',
-    //     contents: prompt,
-    //     config: {
-    //       systemInstruction: SYSTEM_PROMPT,
-    //       temperature: 0.7,
-    //       responseMimeType: 'application/json',
-    //       maxOutputTokens:10000
-    //     },
-    //   });
-    // } catch (aiErr: unknown) {
-    //   console.error('Gemini API error:', aiErr);
-    //   const msg =
-    //     aiErr instanceof Error ? aiErr.message : 'Gemini API call failed';
+    // ── Call Gemini ────────────────────────────────────────────────
+    let response;
+    try {
+      response = await currentAi.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+        config: {
+          systemInstruction: SYSTEM_PROMPT,
+          temperature: 0.7,
+          responseMimeType: 'application/json',
+          maxOutputTokens:10000
+        },
+      });
+    } catch (aiErr: unknown) {
+      console.error('Gemini API error:', aiErr);
+      const msg =
+        aiErr instanceof Error ? aiErr.message : 'Gemini API call failed';
 
-    //   // Detect rate-limit from Google API errors
-    //   if (msg.toLowerCase().includes('resource exhausted') || msg.includes('429')) {
-    //     return buildError('RATE_LIMIT_ERROR', msg, 429);
-    //   }
-    //   return buildError('AI_GENERATION_ERROR', msg, 502);
-    // }
+      // Detect rate-limit from Google API errors
+      if (msg.toLowerCase().includes('resource exhausted') || msg.includes('429')) {
+        return buildError('RATE_LIMIT_ERROR', msg, 429);
+      }
+      return buildError('AI_GENERATION_ERROR', msg, 502);
+    }
 
-    // // ── Parse JSON response ───────────────────────────────────────
-    // const text = response.text ?? '';
+    // ── Parse JSON response ───────────────────────────────────────
+    const text = response.text ?? '';
 
-    // let parsedResponse;
-    // try {
-    //   parsedResponse = JSON.parse(text);
-    // } catch {
-    //   // Try to extract JSON from possible markdown fences
-    //   const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
-    //   if (jsonMatch) {
-    //     try {
-    //       parsedResponse = JSON.parse(jsonMatch[1].trim());
-    //     } catch {
-    //       return buildError(
-    //         'JSON_PARSE_ERROR',
-    //         'Could not parse the extracted JSON from AI response.',
-    //         502,
-    //       );
-    //     }
-    //   } else {
-    //     return buildError(
-    //       'JSON_PARSE_ERROR',
-    //       'The AI response was not valid JSON.',
-    //       502,
-    //     );
-    //   }
-    // }
+    let parsedResponse;
+    try {
+      parsedResponse = JSON.parse(text);
+    } catch {
+      // Try to extract JSON from possible markdown fences
+      const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
+      if (jsonMatch) {
+        try {
+          parsedResponse = JSON.parse(jsonMatch[1].trim());
+        } catch {
+          return buildError(
+            'JSON_PARSE_ERROR',
+            'Could not parse the extracted JSON from AI response.',
+            502,
+          );
+        }
+      } else {
+        return buildError(
+          'JSON_PARSE_ERROR',
+          'The AI response was not valid JSON.',
+          502,
+        );
+      }
+    }
 
-    // // ── Save to MongoDB via Prisma ────────────────────────────────
-    // let chat;
-    // try {
-    //   chat = await prisma.chat.create({
-    //     data: {
-    //       email,
-    //       name,
-    //       prompt,
-    //       response: parsedResponse,
-    //     },
-    //   });
-    // } catch (dbErr: unknown) {
-    //   console.error('Database error:', dbErr);
-    //   // Still return the generated data even if save fails
-    //   return NextResponse.json({
-    //     id: null,
-    //     data: parsedResponse,
-    //     warning: {
-    //       code: 'DATABASE_ERROR' as ErrorCode,
-    //       message: 'Analysis generated but could not be saved to history.',
-    //     },
-    //   });
-    // }
-
-    // return NextResponse.json({
-    //   id: chat.id,
-    //   data: parsedResponse,
-    // });
+    // ── Save to MongoDB via Prisma ────────────────────────────────
+    let chat;
+    try {
+      chat = await prisma.chat.create({
+        data: {
+          email,
+          name,
+          prompt,
+          response: parsedResponse,
+        },
+      });
+    } catch (dbErr: unknown) {
+      console.error('Database error:', dbErr);
+      // Still return the generated data even if save fails
+      return NextResponse.json({
+        id: null,
+        data: parsedResponse,
+        warning: {
+          code: 'DATABASE_ERROR' as ErrorCode,
+          message: 'Analysis generated but could not be saved to history.',
+        },
+      });
+    }
 
     return NextResponse.json({
-      id: {email, prompt, name},
-      data: sampleDataForAI,
+      id: chat.id,
+      data: parsedResponse,
     });
+
+
   } catch (error: unknown) {
     console.error('Generate API error:', error);
     const message =

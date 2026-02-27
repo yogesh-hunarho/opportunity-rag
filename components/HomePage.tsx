@@ -362,8 +362,8 @@ const HomePage = () => {
 
       <div className="flex h-screen overflow-hidden">
         {/* Chat History Sidebar */}
-        <aside className={`${sidebarOpen ? 'w-80' : 'w-0'} transition-all duration-300 bg-card/10 border-r border-border flex flex-col overflow-hidden shrink-0`}>
-          <div className="p-4 border-b border-border">
+        <aside className={`${sidebarOpen ? 'w-80 border-r' : 'w-0'} transition-all duration-300 bg-card/10 border-border flex flex-col overflow-hidden shrink-0`}>
+          <div className="p-4 border-b-0 border-border">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-bold text-foreground">💬 Chat History</h2>
               <Button
@@ -409,7 +409,7 @@ const HomePage = () => {
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="bg-background border-b border-border px-4 py-3.5 flex items-center gap-3 shrink-0">
+          <div className="bg-background border-b-0 border-border px-4 py-3.5 flex items-center gap-3 shrink-0">
             <Button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="transition-colors text-lg cursor-pointer"
@@ -481,13 +481,13 @@ const HomePage = () => {
             )}
 
             {!loading && !analysisData && !error && (
-              <div className="relative flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-64px)] overflow-hidden">
+              <div className="relative flex-1 flex flex-col items-center justify-center min-h-[calc(80vh-64px)] overflow-hidden">
                 {/* Background Image with Overlay */}
                 <div 
                   className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000"
                   style={{ backgroundImage: 'url("/poster.png")' }}
                 >
-                  <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px]" />
+                  <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" />
                   <div className="absolute inset-0 bg-linear-to-b from-background/20 via-transparent to-background" />
                 </div>
 
@@ -508,10 +508,10 @@ const HomePage = () => {
                   </div> */}
 
                   <div className="animate-[fadeSlideIn_0.6s_ease-out]">
-                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4 bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4 ">
                       Market Analyze
                     </h1>
-                    <p className="text-muted-foreground text-sm md:text-base max-w-lg mx-auto leading-relaxed">
+                    <p className="text-white text-sm md:text-base max-w-lg mx-auto leading-relaxed">
                       Enter any industry, policy, or market topic above and AI will generate a comprehensive business opportunity analysis for you.
                     </p>
                   </div>
@@ -544,7 +544,7 @@ const HomePage = () => {
                             Analyzing...
                           </span>
                         ) : (
-                          <>🚀 <span className="ml-1">Generate</span></>
+                          <><span className="ml-1">Analyze</span></>
                         )}
                       </Button>
                     </form>
