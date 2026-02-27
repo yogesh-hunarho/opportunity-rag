@@ -97,16 +97,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const pickedApiKeys = [
-      "AIzaSyCHI4M7OYUFz-FgNTfI5obWR4mafRK9qOw",
-      "AIzaSyCISw8Zkm_lXypTk9Mdxkembh8u2jHSl4g",
-      "AIzaSyAnWB-k4UdzQ3txwXuRQAaSWoVBLP4HPkQ",
-      "AIzaSyADaqeXpre3Hyb05VKAU75RGTuXZoaNKfk"
-    ];
+    // const pickedApiKeys = [
+    //   "AIzaSyCHI4M7OYUFz-FgNTfI5obWR4mafRK9qOw",
+    //   "AIzaSyCISw8Zkm_lXypTk9Mdxkembh8u2jHSl4g",
+    //   "AIzaSyAnWB-k4UdzQ3txwXuRQAaSWoVBLP4HPkQ",
+    //   "AIzaSyADaqeXpre3Hyb05VKAU75RGTuXZoaNKfk"
+    // ];
 
-    const randomApiKey = pickedApiKeys[Math.floor(Math.random() * pickedApiKeys.length)];
+    // const randomApiKey = pickedApiKeys[Math.floor(Math.random() * pickedApiKeys.length)];
 
-    const currentAi = new GoogleGenAI({ apiKey: randomApiKey });
+    const currentAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
     // ── Call Gemini ────────────────────────────────────────────────
     let response;
