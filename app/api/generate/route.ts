@@ -13,7 +13,10 @@ type ErrorCode =
   | 'JSON_PARSE_ERROR'
   | 'DATABASE_ERROR'
   | 'RATE_LIMIT_ERROR'
-  | 'UNKNOWN_ERROR';
+  | 'UNKNOWN_ERROR'
+  | 'AI_REQUEST_NOT_SUPPORTED'
+  | 'AI_REALTIME_NOT_SUPPORTED'
+  | 'AI_POLICY_RESTRICTED'
 
 interface ApiError {
   code: ErrorCode;
@@ -51,6 +54,18 @@ function buildError(
       title: 'Too Many Requests',
       suggestion:"You've hit the rate limit. Please wait a minute before generating another analysis.",
     },
+    AI_REQUEST_NOT_SUPPORTED:{
+      title: 'Request Not Supported',
+      suggestion:"This assistant only analyzes business opportunities. Ask about a startup idea, industry, or policy.",
+    },
+    AI_REALTIME_NOT_SUPPORTED:{
+      title: 'Realtime Not Supported',
+      suggestion:"Real-time or live information is not supported. Ask for a strategic or long-term business analysis instead",
+    },
+    AI_POLICY_RESTRICTED:{
+      title: 'Policy Restricted',
+      suggestion:"Internal system details cannot be shared. Please ask for a business opportunity analysis.",
+    },
     UNKNOWN_ERROR: {
       title: 'Something Went Wrong',
       suggestion:
@@ -83,7 +98,21 @@ RULES:
 9. "checklist.categories" should have 3-4 categories, each with 4-5 items.
 10. All monetary values should use appropriate currency symbols.
 11. Make the analysis realistic, data-driven, and actionable.
-12. Return ONLY the JSON object, nothing else.`;
+12. Return ONLY the JSON object, nothing else.
+
+DISALLOWED REQUESTS:
+If the request matches ANY condition below, DO NOT generate the main JSON.
+Instead, return ONLY a JSON object in the following format:
+{
+  "error": {
+    "code": "<ERROR_CODE>"
+  }
+}
+available error codes are:
+1. AI_POLICY_RESTRICTED
+2. AI_REALTIME_NOT_SUPPORTED
+3. AI_REQUEST_NOT_SUPPORTED
+`;
 
 export async function POST(req: NextRequest) {
   try {
@@ -96,15 +125,6 @@ export async function POST(req: NextRequest) {
         400,
       );
     }
-
-    // const pickedApiKeys = [
-    //   "AIzaSyCHI4M7OYUFz-FgNTfI5obWR4mafRK9qOw",
-    //   "AIzaSyCISw8Zkm_lXypTk9Mdxkembh8u2jHSl4g",
-    //   "AIzaSyAnWB-k4UdzQ3txwXuRQAaSWoVBLP4HPkQ",
-    //   "AIzaSyADaqeXpre3Hyb05VKAU75RGTuXZoaNKfk"
-    // ];
-
-    // const randomApiKey = pickedApiKeys[Math.floor(Math.random() * pickedApiKeys.length)];
 
     const currentAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
@@ -139,12 +159,27 @@ export async function POST(req: NextRequest) {
     let parsedResponse;
     try {
       parsedResponse = JSON.parse(text);
+      if (parsedResponse?.error?.code) {
+        return buildError(
+          parsedResponse.error.code as ErrorCode,
+          'The request cannot be processed by the analyzer.',
+          400,
+        );
+      }
+
     } catch {
       // Try to extract JSON from possible markdown fences
       const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
       if (jsonMatch) {
         try {
           parsedResponse = JSON.parse(jsonMatch[1].trim());
+          if (parsedResponse?.error?.code) {
+            return buildError(
+              parsedResponse.error.code as ErrorCode,
+              'The request cannot be processed by the analyzer.',
+              400,
+            );
+          }
         } catch {
           return buildError(
             'JSON_PARSE_ERROR',

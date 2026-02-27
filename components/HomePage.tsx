@@ -3,13 +3,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import AVGCAnalyzer from './AVGCAnalyzer';
 import { Button } from './ui/button';
-import Image from 'next/image';
 import { Menu, Plus } from 'lucide-react';
 import NovaraHero from './testlanding-page';
 import { useAuthStore } from '@/lib/store';
-
-// import LandingPage from './LandingPage';
-// import sampleData from '@/lib/avgc-data.json';
 
 interface ChatItem {
   id: string;
@@ -23,6 +19,9 @@ type ErrorCode =
   | 'JSON_PARSE_ERROR'
   | 'DATABASE_ERROR'
   | 'RATE_LIMIT_ERROR'
+  | 'AI_REQUEST_NOT_SUPPORTED'
+  | 'AI_REALTIME_NOT_SUPPORTED'
+  | 'AI_POLICY_RESTRICTED'
   | 'UNKNOWN_ERROR';
 
 interface ApiError {
@@ -69,6 +68,24 @@ const ERROR_META: Record<ErrorCode, { icon: string; gradient: string; border: st
     border: 'border-red-500/40',
     bg: 'bg-red-500/10',
   },
+  AI_REQUEST_NOT_SUPPORTED: {
+    icon: '🚫',
+    gradient: 'from-slate-500/20 to-slate-900/10',
+    border: 'border-slate-500/40',
+    bg: 'bg-slate-500/10',
+  },
+  AI_REALTIME_NOT_SUPPORTED: {
+    icon: '⏱️',
+    gradient: 'from-blue-500/20 to-blue-900/10',
+    border: 'border-blue-500/40',
+    bg: 'bg-blue-500/10',
+  },
+  AI_POLICY_RESTRICTED: {
+    icon: '🔒',
+    gradient: 'from-zinc-500/20 to-zinc-900/10',
+    border: 'border-zinc-500/40',
+    bg: 'bg-zinc-500/10',
+  },
   UNKNOWN_ERROR: {
     icon: '❌',
     gradient: 'from-red-500/20 to-red-900/10',
@@ -88,6 +105,12 @@ const ErrorDisplay = ({
   onDismiss: () => void;
 }) => {
   const meta = ERROR_META[error.code] ?? ERROR_META.UNKNOWN_ERROR;
+  const isRetryable = ![
+    'AI_REQUEST_NOT_SUPPORTED',
+    'AI_REALTIME_NOT_SUPPORTED',
+    'AI_POLICY_RESTRICTED',
+  ].includes(error.code);
+
 
   return (
     <div className="m-6 max-w-2xl mx-auto animate-[fadeSlideIn_0.35s_ease-out]">
@@ -109,9 +132,9 @@ const ErrorDisplay = ({
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
                 <h3 className="text-white font-bold text-base">{error.title}</h3>
-                <span className="px-2 py-0.5 rounded-md bg-white/10 text-[10px] font-mono text-white/60 uppercase tracking-wider">
-                  {error.code.replace(/_/g, ' ')}
-                </span>
+                {/* <span className="px-2 py-0.5 rounded-md bg-white/10 text-[10px] font-mono text-white/60 uppercase tracking-wider">
+                  {error.code.replace(/_/g, ' ')?.toLowerCase()}
+                </span> */}
               </div>
               <p className="text-white/70 text-sm leading-relaxed">{error.message}</p>
             </div>
@@ -133,7 +156,7 @@ const ErrorDisplay = ({
 
           {/* Action buttons */}
           <div className="mt-5 flex items-center gap-3">
-            {onRetry && (
+            {(onRetry && isRetryable) && (
               <button
                 onClick={onRetry}
                 className="px-5 py-2 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-blue-600/20 cursor-pointer flex items-center gap-2"
@@ -492,21 +515,6 @@ const HomePage = () => {
                 </div>
 
                 <div className="relative z-10 flex flex-col items-center justify-center gap-6 text-center p-6 w-full max-w-5xl">
-                  {/* <div className="animate-[fadeSlideIn_0.5s_ease-out]">
-                      <div className="flex justify-center">
-                        <div className="relative group">
-                          <Image
-                            src="/logo1.png"
-                            alt="AI-powered market analysis illustration"
-                            width={200}
-                            height={200}
-                            className="relative"
-                            priority
-                          />
-                        </div>
-                      </div>
-                  </div> */}
-
                   <div className="animate-[fadeSlideIn_0.6s_ease-out]">
                     <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4 ">
                       Market Analyze
