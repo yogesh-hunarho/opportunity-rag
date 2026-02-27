@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
-import { ArrowRight, Zap, Target, BarChart3 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface LandingPageProps {
   onLogin: (email: string, apiKey: string) => void;
@@ -23,24 +23,6 @@ const LandingPage = ({ onLogin }: LandingPageProps) => {
       onLogin(email, apiKey);
     }
   };
-
-  const features = [
-    {
-      icon: <Zap className="w-6 h-6 text-yellow-400" />,
-      title: "Real-time Analysis",
-      desc: "Get instant insights into market trends and business opportunities using advanced AI."
-    },
-    {
-      icon: <Target className="w-6 h-6 text-blue-400" />,
-      title: "Strategic Gap Analysis",
-      desc: "Identify untapped niches and first-mover advantages in any industry."
-    },
-    {
-      icon: <BarChart3 className="w-6 h-6 text-purple-400" />,
-      title: "Data-Driven Roadmaps",
-      desc: "Receive structured execution plans and readiness checklists to launch your venture."
-    }
-  ];
 
   return (
     <div className="relative min-h-screen bg-black overflow-hidden font-sans">
@@ -143,34 +125,6 @@ const LandingPage = ({ onLogin }: LandingPageProps) => {
           </motion.div>
         </div>
       </section>
-
-      {/* --- FEATURES SECTION --- */}
-      {/* <section className="relative z-30 py-24 px-4 bg-black">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Strategic Insights, Automated</h2>
-            <p className="text-gray-400">Everything you need to master your market vertical.</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.map((feature, idx) => (
-              <motion.div
-                key={idx}
-                whileHover={{ y: -10 }}
-                className="p-8 rounded-3xl bg-white/5 border border-white/5 hover:border-white/10 transition-all"
-              >
-                <div className="mb-6 p-3 rounded-2xl bg-white/5 inline-block">
-                  {feature.icon}
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-                <p className="text-gray-400 leading-relaxed text-sm">
-                  {feature.desc}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section> */}
     </div>
   );
 };

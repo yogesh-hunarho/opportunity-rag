@@ -10,6 +10,7 @@ datasource db {
 model Chat {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   email     String
+  name      String
   prompt    String
   response  Json
   createdAt DateTime @default(now())

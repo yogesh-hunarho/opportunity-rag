@@ -2,17 +2,15 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import AVGCAnalyzer from './AVGCAnalyzer';
-import Link from 'next/link';
 import { Button } from './ui/button';
 import Image from 'next/image';
-import { ModeToggle } from './mode-toggle';
 import { Menu, Plus } from 'lucide-react';
-import LandingPage from './LandingPage';
+import NovaraHero from './testlanding-page';
+import { useAuthStore } from '@/lib/store';
 
+// import LandingPage from './LandingPage';
 // import sampleData from '@/lib/avgc-data.json';
 
-
-// ── Types ───────────────────────────────────────────────────────────
 interface ChatItem {
   id: string;
   prompt: string;
@@ -181,10 +179,10 @@ const WarningBanner = ({
 
 // ── Main Component ──────────────────────────────────────────────────
 const HomePage = () => {
-  const [email, setEmail] = useState('');
-  const [apiKey, setApiKey] = useState('');
+  const { name, email, isLoggedIn, setAuth, logout } = useAuthStore();
+  const [hasHydrated, setHasHydrated] = useState(false);
+  
   const [prompt, setPrompt] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ApiError | null>(null);
   const [warning, setWarning] = useState<WarningInfo | null>(null);
@@ -219,17 +217,14 @@ const HomePage = () => {
   }, [email]);
 
   useEffect(() => {
-    if (isLoggedIn && email) {
+    setHasHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (hasHydrated && isLoggedIn && email) {
       fetchChats();
     }
-  }, [isLoggedIn, email, fetchChats]);
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email.trim()) {
-      setIsLoggedIn(true);
-    }
-  };
+  }, [hasHydrated, isLoggedIn, email, fetchChats]);
 
   const handleGenerate = async (e?: React.FormEvent, retryPrompt?: string) => {
     if (e) e.preventDefault();
@@ -247,7 +242,7 @@ const HomePage = () => {
       const res = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, prompt: currentPrompt, apiKey }),
+        body: JSON.stringify({ email, name, prompt: currentPrompt,  }),
       });
 
       const result = await res.json();
@@ -331,9 +326,7 @@ const HomePage = () => {
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    setEmail('');
-    setApiKey('');
+    logout();
     setAnalysisData(null);
     setChats([]);
     setActiveChatId(null);
@@ -341,14 +334,15 @@ const HomePage = () => {
     setWarning(null);
   };
 
+  // Hydration guard for Next.js SSR with persisted store
+  if (!hasHydrated) return null;
+
   // Email login screen
   if (!isLoggedIn) {
     return (
-      <LandingPage 
-        onLogin={(receivedEmail, receivedApiKey) => {
-          setEmail(receivedEmail);
-          setApiKey(receivedApiKey);
-          setIsLoggedIn(true);
+      <NovaraHero    
+        onLogin={(receivedName, receivedEmail) => {
+          setAuth(receivedName, receivedEmail);
         }} 
       />
     );
@@ -368,16 +362,18 @@ const HomePage = () => {
 
       <div className="flex h-screen overflow-hidden">
         {/* Chat History Sidebar */}
-        <aside className={`${sidebarOpen ? 'w-80' : 'w-0'} transition-all duration-300 bg-card border-r border-border flex flex-col overflow-hidden shrink-0`}>
+        <aside className={`${sidebarOpen ? 'w-80' : 'w-0'} transition-all duration-300 bg-card/10 border-r border-border flex flex-col overflow-hidden shrink-0`}>
           <div className="p-4 border-b border-border">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between">
               <h2 className="text-sm font-bold text-foreground">💬 Chat History</h2>
-              <button
+              <Button
                 onClick={handleLogout}
-                className="text-[10px] text-red-900 hover:text-red-400 transition-colors cursor-pointer"
+                variant="outline"
+                size="sm"
+                className='cursor-pointer mb-0 text-red-400 hover:text-red-500 hover:bg-red-500'
               >
                 Logout
-              </button>
+              </Button>
             </div>
             {/* <div className="text-[10px] text-[#6b7ca4] truncate">{email}</div> */}
           </div>
@@ -396,7 +392,7 @@ const HomePage = () => {
                   className={`w-full text-left p-3 rounded-xl transition-all cursor-pointer ${
                     activeChatId === chat.id
                       ? 'bg-blue-600/20 border border-blue-500/30'
-                      : 'hover:bg-accent border border-transparent'
+                      : 'hover:bg-primary/30 border border-transparent'
                   }`}
                 >
                   <div className="text-xs font-semibold text-foreground truncate">{chat.prompt}</div>
@@ -413,7 +409,7 @@ const HomePage = () => {
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="bg-background border-b border-border px-4 py-3 flex items-center gap-3 shrink-0">
+          <div className="bg-background border-b border-border px-4 py-3.5 flex items-center gap-3 shrink-0">
             <Button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="transition-colors text-lg cursor-pointer"
@@ -425,7 +421,7 @@ const HomePage = () => {
             </Button>
 
             <div className="flex-1 flex justify-end items-center gap-4">
-              <ModeToggle />
+              {/* <ModeToggle /> */}
               {analysisData && (
                 <Button
                   variant={"default"}
@@ -485,82 +481,92 @@ const HomePage = () => {
             )}
 
             {!loading && !analysisData && !error && (
-              <div className="flex flex-col items-center justify-center h-full gap-6 text-center p-6">
-                <div className="text-center">
-                    <div className="flex justify-center">
-                      <div className="relative">
-                        <Image
-                          src="/logo1.png"
-                          alt="AI-powered market analysis illustration"
-                          width={200}
-                          height={200}
-                          priority
+              <div className="relative flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-64px)] overflow-hidden">
+                {/* Background Image with Overlay */}
+                <div 
+                  className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000"
+                  style={{ backgroundImage: 'url("/poster.png")' }}
+                >
+                  <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px]" />
+                  <div className="absolute inset-0 bg-linear-to-b from-background/20 via-transparent to-background" />
+                </div>
+
+                <div className="relative z-10 flex flex-col items-center justify-center gap-6 text-center p-6 w-full max-w-5xl">
+                  {/* <div className="animate-[fadeSlideIn_0.5s_ease-out]">
+                      <div className="flex justify-center">
+                        <div className="relative group">
+                          <Image
+                            src="/logo1.png"
+                            alt="AI-powered market analysis illustration"
+                            width={200}
+                            height={200}
+                            className="relative"
+                            priority
+                          />
+                        </div>
+                      </div>
+                  </div> */}
+
+                  <div className="animate-[fadeSlideIn_0.6s_ease-out]">
+                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4 bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                      Market Analyze
+                    </h1>
+                    <p className="text-muted-foreground text-sm md:text-base max-w-lg mx-auto leading-relaxed">
+                      Enter any industry, policy, or market topic above and AI will generate a comprehensive business opportunity analysis for you.
+                    </p>
+                  </div>
+
+                  <div className="max-w-3xl w-full animate-[fadeSlideIn_0.7s_ease-out]">
+                    <form onSubmit={handleGenerate} className="flex flex-col sm:flex-row gap-3">
+                      <div className="flex-1 relative">
+                        <input
+                          type="text"
+                          value={prompt}
+                          onChange={(e) => setPrompt(e.target.value)}
+                          placeholder="Enter a topic to analyze (e.g., 'EV charging infrastructure in India 2026')"
+                          disabled={loading}
+                          className="w-full px-5 py-3.5 rounded-2xl bg-background/50 backdrop-blur-md border border-border/50 text-foreground placeholder-muted-foreground focus:outline-none focus:border-blue-500 ring-1 ring-blue-200/20 focus:ring-1 focus:ring-blue-500 transition-all text-sm md:text-base disabled:opacity-50 shadow-2xl"
                         />
                       </div>
-                    </div>
-                    {/* <h1 className="text-5xl md:text-6xl font-bold text-balance">
-                      <span className="dark:text-white text-dark ">Market Analyze</span> <br/>
-                    </h1> */}
-                </div>
-
-                <div>
-                  <h1 className="text-xl md:text-4xl font-bold text-balance">Market Analyze</h1>
-                  <p className="text-muted-foreground text-sm max-w-md">
-                    Enter any industry, policy, or market topic above and AI will generate a comprehensive business opportunity analysis for you.
-                  </p>
-                </div>
-
-                <div className="max-w-4xl w-full">
-                  <form onSubmit={handleGenerate} className="flex-1 flex gap-3">
-                    <div className="flex-1 relative">
-                      <input
-                        type="text"
-                        value={prompt}
-                        onChange={(e) => setPrompt(e.target.value)}
-                        placeholder="Enter a topic to analyze (e.g., 'EV charging infrastructure in India 2026')"
-                        disabled={loading}
-                        className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm disabled:opacity-50"
-                      />
-                    </div>
-                    <Button
-                      type="submit"
-                      disabled={loading || !prompt.trim()}
-                      variant="default"
-                      size="lg"
-                      className='cursor-pointer'
-                      // className="px-6 py-2.5 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 disabled:from-gray-700 disabled:to-gray-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-600/20 text-sm whitespace-nowrap cursor-pointer disabled:cursor-not-allowed"
-                    >
-                      {loading ? (
-                        <span className="flex items-center gap-2">
-                          <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                          </svg>
-                          Analyzing...
-                        </span>
-                      ) : (
-                        '🚀 Generate'
-                      )}
-                    </Button>
-                  </form>
-                </div>
-                
-                <div className="flex flex-wrap gap-2 justify-center mt-2">
-                  {[
-                    'EV Charging Infrastructure India',
-                    'AI in Healthcare 2026',
-                    'Green Hydrogen Economy',
-                    'EdTech for Rural India',
-                    'Space Tech Startups',
-                  ].map((suggestion) => (
-                    <button
-                      key={suggestion}
-                      onClick={() => setPrompt(suggestion)}
-                      className="px-3 py-1.5 bg-accent text-primary text-xs rounded-lg hover:bg-accent/80 transition-colors cursor-pointer border border-border"
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
+                      <Button
+                        type="submit"
+                        disabled={loading || !prompt.trim()}
+                        variant="default"
+                        size="lg"
+                        className='cursor-pointer disabled:cursor-not-allowed bg-primary/60 hover:bg-primary/50 rounded-2xl px-8 h-auto py-3.5 font-bold text-white'
+                      >
+                        {loading ? (
+                          <span className="flex items-center gap-2">
+                            <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                            </svg>
+                            Analyzing...
+                          </span>
+                        ) : (
+                          <>🚀 <span className="ml-1">Generate</span></>
+                        )}
+                      </Button>
+                    </form>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2 justify-center mt-4 animate-[fadeSlideIn_0.8s_ease-out]">
+                    {[
+                      'EV Charging Infrastructure India',
+                      'AI in Healthcare 2026',
+                      'Green Hydrogen Economy',
+                      'EdTech for Rural India',
+                      'Space Tech Startups',
+                    ].map((suggestion) => (
+                      <button
+                        key={suggestion}
+                        onClick={() => setPrompt(suggestion)}
+                        className="px-4 py-2 bg-primary/10 backdrop-blur-sm text-foreground/80 text-xs font-medium rounded-xl hover:bg-primary/50 hover:text-accent-foreground transition-all cursor-pointer border border-border/50 shadow-sm"
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}

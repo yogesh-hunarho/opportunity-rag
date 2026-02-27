@@ -35,10 +35,10 @@ const AVGCAnalyzer = ({ data }) => {
       case 'opportunities':
         return (
           <div className="animate-in fade-in duration-500">
-            <h2 className="text-2xl font-bold mb-1.5">{data.sections.opportunities.title}</h2>
-            <p className="text-sm text-muted-foreground mb-6">{data.sections.opportunities.subtitle}</p>
+            <h2 className="text-2xl font-bold mb-1.5">{data?.sections?.opportunities?.title}</h2>
+            <p className="text-sm text-muted-foreground mb-6">{data?.sections?.opportunities?.subtitle}</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
-              {data.sections.opportunities.items.map((item, idx) => (
+              {data?.sections?.opportunities?.items?.map((item, idx) => (
                 <div
                   key={idx}
                   onClick={() => toggleCard(idx)}
@@ -56,7 +56,7 @@ const AVGCAnalyzer = ({ data }) => {
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                       item.pillType === 'hot' ? 'bg-[#7c2d12] text-white' :
                       item.pillType === 'high' ? 'bg-[#064e3b] text-[#34d399]' :
-                      'bg-[#1e3a5f] text-secondary'
+                      'bg-[#1e3a5f] text-primary'
                     }`}>
                       {item.pill}
                     </span>
@@ -66,7 +66,7 @@ const AVGCAnalyzer = ({ data }) => {
                   <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
                   
                   <div className="flex gap-3 mt-3.5">
-                    {item.meta.map((m, midx) => (
+                    {item?.meta?.map((m, midx) => (
                       <div key={midx} className="text-[11px] text-primary">
                         {m.label}: <span className="text-primary font-semibold">{m.val}</span>
                       </div>
@@ -93,11 +93,11 @@ const AVGCAnalyzer = ({ data }) => {
       case 'firstmover':
         return (
           <div className="animate-in fade-in duration-500">
-            <h2 className="text-2xl font-bold mb-1.5">{data.sections.firstmover.title}</h2>
-            <p className="text-sm text-muted-foreground mb-6">{data.sections.firstmover.subtitle}</p>
+            <h2 className="text-2xl font-bold mb-1.5">{data?.sections.firstmover.title}</h2>
+            <p className="text-sm text-muted-foreground mb-6">{data?.sections.firstmover.subtitle}</p>
             
             <div className="space-y-5">
-              {data.sections.firstmover.scorecards.map((card, idx) => (
+              {data?.sections.firstmover.scorecards.map((card, idx) => (
                 <div key={idx} className="bg-card border border-border rounded-xl p-6">
                   <h3 className="text-lg font-bold mb-4">{card.title}</h3>
                   <div className="space-y-3">
@@ -126,8 +126,8 @@ const AVGCAnalyzer = ({ data }) => {
             <div className="mt-6 bg-card border border-border rounded-xl p-5">
               <h3 className="text-base font-bold mb-3">🏆 Top First Mover Picks (Ranked)</h3>
               <div className="flex flex-col gap-2">
-                {data.sections.firstmover.topPicks.map((pick, pidx) => (
-                  <div key={pidx} className="flex items-center gap-3 p-3 bg-primary rounded-lg">
+                {data?.sections.firstmover.topPicks.map((pick, pidx) => (
+                  <div key={pidx} className="flex items-center gap-3 p-3 bg-primary/10 rounded-lg">
                     <div className="text-xl">{pick.rank}</div>
                     <div>
                       <div className="font-bold text-sm">{pick.title}</div>
@@ -143,10 +143,10 @@ const AVGCAnalyzer = ({ data }) => {
       case 'roadmap':
         return (
           <div className="animate-in fade-in duration-500">
-            <h2 className="text-2xl font-bold mb-1.5">{data.sections.roadmap.title}</h2>
-            <p className="text-sm text-muted-foreground mb-6">{data.sections.roadmap.subtitle}</p>
+            <h2 className="text-2xl font-bold mb-1.5">{data?.sections.roadmap.title}</h2>
+            <p className="text-sm text-muted-foreground mb-6">{data?.sections.roadmap.subtitle}</p>
             <div className="relative pl-8 border-l border-border ml-2 space-y-6">
-              {data.sections.roadmap.phases.map((phase, idx) => (
+              {data?.sections.roadmap.phases.map((phase, idx) => (
                 <div key={idx} className="relative">
                   <div className={`absolute -left-[41px] top-1 w-4 h-4 rounded-full border-2 border-background z-10 ${
                     phase.color === 'green' ? 'bg-[#10b981]' :
@@ -175,20 +175,20 @@ const AVGCAnalyzer = ({ data }) => {
       case 'gaps':
         return (
           <div className="animate-in fade-in duration-500">
-            <h2 className="text-2xl font-bold mb-1.5">{data.sections.gaps.title}</h2>
-            <p className="text-sm text-muted-foreground mb-6">{data.sections.gaps.subtitle}</p>
+            <h2 className="text-2xl font-bold mb-1.5">{data?.sections.gaps.title}</h2>
+            <p className="text-sm text-muted-foreground mb-6">{data?.sections.gaps.subtitle}</p>
             <div className="overflow-x-auto bg-card border border-border rounded-xl">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="bg-primary text-muted-foreground uppercase tracking-wider">
-                    {data.sections.gaps.table.headers.map((header, idx) => (
+                  <tr className="bg-primary/10 text-muted-foreground uppercase tracking-wider">
+                    {data?.sections.gaps.table.headers.map((header, idx) => (
                       <th key={idx} className="p-3.5 font-bold">{header}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-primary">
-                  {data.sections.gaps.table.rows.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-primary/50 transition-colors">
+                  {data?.sections.gaps.table.rows.map((row, idx) => (
+                    <tr key={idx} className="hover:bg-primary/10 transition-colors">
                       <td className="p-3.5 font-bold">{row.area}</td>
                       <td className="p-3.5">{row.who}</td>
                       <td className="p-3.5 text-muted-foreground italic">{row.current}</td>
@@ -209,13 +209,13 @@ const AVGCAnalyzer = ({ data }) => {
                 <div className="text-[13px] font-bold mb-2 text-foreground flex items-center gap-2">
                   <span className="text-orange-500">⚠️</span> Policy Execution Risks
                 </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">{data.sections.gaps.risks}</p>
+                <p className="text-xs text-muted-foreground leading-relaxed">{data?.sections.gaps.risks}</p>
               </div>
               <div className="bg-card border border-border rounded-xl p-4">
                 <div className="text-[13px] font-bold mb-2 text-foreground flex items-center gap-2">
                   <span className="text-green-500">✅</span> Why First Movers Win Here
                 </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">{data.sections.gaps.wins}</p>
+                <p className="text-xs text-muted-foreground leading-relaxed">{data?.sections.gaps.wins}</p>
               </div>
             </div>
           </div>
@@ -224,8 +224,8 @@ const AVGCAnalyzer = ({ data }) => {
       case 'checklist':
         return (
           <div className="animate-in fade-in duration-500">
-            <h2 className="text-2xl font-bold mb-1.5">{data.sections.checklist.title}</h2>
-            <p className="text-sm text-muted-foreground mb-6">{data.sections.checklist.subtitle}</p>
+            <h2 className="text-2xl font-bold mb-1.5">{data?.sections.checklist.title}</h2>
+            <p className="text-sm text-muted-foreground mb-6">{data?.sections.checklist.subtitle}</p>
             
             <div className="bg-card border border-border rounded-xl p-5 mb-5 shadow-inner">
               <div className="flex justify-between items-center mb-2">
@@ -241,7 +241,7 @@ const AVGCAnalyzer = ({ data }) => {
             </div>
 
             <div className="space-y-6">
-              {data.sections.checklist.categories.map((cat, idx) => (
+              {data?.sections.checklist.categories.map((cat, idx) => (
                 <div key={idx}>
                   <h4 className="text-sm font-bold mb-3 text-primary border-b border-border pb-2">{cat.title}</h4>
                   <div className="space-y-0.5">
@@ -285,19 +285,19 @@ const AVGCAnalyzer = ({ data }) => {
       <header className="bg-card p-6 md:px-8 flex flex-col md:flex-row items-center gap-4">
         {/* <div className="text-4xl">🎮</div> */}
         <div className="text-center md:text-left">
-          <h1 className="text-xl md:text-2xl font-bold text-foreground tracking-tight">{data.header.title}</h1>
-          <p className="text-[12px] md:text-sm text-muted-foreground mt-1">{data.header.subtitle}</p>
+          <h1 className="text-xl md:text-2xl font-bold text-foreground tracking-tight">{data?.header.title}</h1>
+          <p className="text-[12px] md:text-sm text-muted-foreground mt-1">{data?.header.subtitle}</p>
         </div>
         <div className="md:ml-auto">
           <div className="bg-linear-to-r from-[#ff6b35] to-[#f7c59f] text-black text-[10px] font-black px-3 py-1 rounded-full whitespace-nowrap shadow-lg shadow-orange-500/20">
-            {data.header.badge}
+            {data?.header.badge}
           </div>
         </div>
       </header>
 
       {/* Stats Bar */}
       <div className="flex flex-wrap bg-primary/10 border-b border-border">
-        {data.stats.map((stat, idx) => (
+        {data?.stats.map((stat, idx) => (
           <div key={idx} className="flex-1 min-w-[50%] md:min-w-0 p-4 text-center border-r border-border last:border-0 transition-colors">
             <div className="text-xl md:text-2xl font-black text-primary">{stat.val}</div>
             <div className="text-[10px] text-foreground uppercase font-bold tracking-widest mt-1">{stat.lbl}</div>
@@ -310,13 +310,13 @@ const AVGCAnalyzer = ({ data }) => {
         <aside className="w-full md:w-64 bg-card border-b md:border-b-0 md:border-r border-border py-4 md:py-6 shrink-0">
           <div className="px-5 mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-primary">Navigation</div>
           <nav className="flex flex-row md:flex-col overflow-x-auto md:overflow-x-visible no-scrollbar">
-            {data.navigation.map((item) => (
+            {data?.navigation.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setActiveSection(item.id)}
                 className={`flex items-center gap-3 px-5 py-3.5 text-sm font-medium border-b-2 md:border-b-0 md:border-l-4 transition-all whitespace-nowrap ${
                   activeSection === item.id 
-                    ? 'bg-accent text-primary border-primary font-bold' 
+                    ? 'bg-accent text-white border-primary font-bold' 
                     : 'text-muted-foreground border-transparent hover:bg-accent hover:text-foreground'
                 }`}
               >
