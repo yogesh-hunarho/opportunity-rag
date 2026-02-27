@@ -3,6 +3,7 @@ import { GoogleGenAI } from '@google/genai';
 import { prisma } from '@/lib/prisma';
 // import sampleData from '@/lib/avgc-data.json';
 import sampleDataForAI from "@/lib/data-for-gemini.json"
+import { sendRateLimitAlert } from '@/lib/email';
 
 
 
@@ -148,6 +149,8 @@ export async function POST(req: NextRequest) {
 
       // Detect rate-limit from Google API errors
       if (msg.toLowerCase().includes('resource exhausted') || msg.includes('429')) {
+        // Send email alert asynchronously
+        sendRateLimitAlert(email, prompt, name).catch(e => console.error('Failed to send email:', e));
         return buildError('RATE_LIMIT_ERROR', msg, 429);
       }
       return buildError('AI_GENERATION_ERROR', msg, 502);
@@ -224,8 +227,6 @@ export async function POST(req: NextRequest) {
       id: chat.id,
       data: parsedResponse,
     });
-
-
   } catch (error: unknown) {
     console.error('Generate API error:', error);
     const message =
