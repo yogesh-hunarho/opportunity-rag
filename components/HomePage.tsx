@@ -319,6 +319,7 @@ const HomePage = () => {
     setLoading(true);
     setError(null);
     setWarning(null);
+    setSidebarOpen(false)
     try {
       const res = await fetch(`/api/chats/${chatId}`);
       const result = await res.json();
